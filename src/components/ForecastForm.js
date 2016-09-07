@@ -28,7 +28,7 @@ class ForecastForm extends Component {
   }
   render(){
     return(
-      <form onSubmit={e => this.submitForm(e)}>
+      <form className="forecastForm" onSubmit={e => this.submitForm(e)}>
         <label>City:</label>
         <input
           type="text"

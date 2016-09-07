@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import Forecast from './components/Forecast'
 import ForecastForm from './components/ForecastForm'
 import ForecastModel from './models/forecast'
+import TenDay from './components/TenDay'
+import VideoBackground from './components/VideoBackground'
+import weatherMappings from './helpers/weatherMappings'
 
 class App extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
+    this.weatherMappings = weatherMappings
     this.state = {
-      forecast: {}
+      forecast: {
+        tenDay: []
+      }
     }
   }
   componentDidMount(){
@@ -17,28 +23,34 @@ class App extends Component {
     let forecast = new ForecastModel("Washington", "DC")
     forecast.getForecast().then(function(res){
       this.setState({
-        forecast: forecast
+        forecast: res
       })
     }.bind(this))
-    console.log("bob");
   }
   getForecast(location){
+    // TODO: Handle Bad user input
+    if(!location) console.log("Error Fetching Location");
     let forecast = new ForecastModel(location.city, location.state)
     forecast.getForecast().then(function(res){
       this.setState({
-        forecast: forecast
+        forecast: res
       })
     }.bind(this))
   }
   render() {
+    console.log(this.state.forecast);
     return (
-      <div className="App">
+      <div className="weather">
+        <VideoBackground
+          videoId={this.weatherMappings[this.state.forecast.icon]}/>
         <h1>Weathereact</h1>
         <ForecastForm
           getForecast={this.getForecast.bind(this)}/>
         <Forecast
           forecast={this.state.forecast}
           />
+        <TenDay
+          forecasts={this.state.forecast.tenDay}/>
       </div>
     );
   }
