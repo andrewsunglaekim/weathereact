@@ -1,18 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Forecast from './components/Forecast'
+import ForecastModel from './models/forecast'
 
 class App extends Component {
+  constructor(){
+    super()
+    this.state = {
+      forecast: {}
+    }
+  }
+  componentDidMount(){
+    this.fetchDefaultCity()
+  }
+  fetchDefaultCity(){
+    let forecast = new ForecastModel("Washington", "DC")
+    forecast.getForecast().then(function(res){
+      this.setState({
+        forecast: forecast
+      })
+    }.bind(this))
+    console.log("bob");
+  }
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h1>Weathereact</h1>
+        <Forecast
+          forecast={this.state.forecast}
+          />
       </div>
     );
   }
